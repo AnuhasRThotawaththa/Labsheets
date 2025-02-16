@@ -1,0 +1,73 @@
+public class BoundedQueue<T> {
+    private T[] queue;
+    private int front;
+    private int rear;
+    private int size;
+    private int capacity;
+
+    @SuppressWarnings("unchecked")
+    public BoundedQueue(int capacity) {
+        this.capacity = capacity;
+        queue = (T[]) new Object[capacity];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    public void enqueue(T item) throws IllegalStateException {
+        if (isFull()) {
+            throw new IllegalStateException("Queue is full");
+        }
+        rear = (rear + 1) % capacity;
+        queue[rear] = item;
+        size++;
+    }
+
+    public T dequeue() throws IllegalStateException {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        T item = queue[front];
+        front = (front + 1) % capacity;
+        size--;
+        return item;
+    }
+
+    public T peek() throws IllegalStateException {
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty");
+        }
+        return queue[front];
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == capacity;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public static void main(String[] args) {
+        BoundedQueue<Integer> queue = new BoundedQueue<>(5);
+
+        try {
+            queue.enqueue(1);
+            queue.enqueue(2);
+            queue.enqueue(3);
+            System.out.println("Front element: " + queue.peek());
+            System.out.println("Dequeued: " + queue.dequeue());
+            queue.enqueue(4);
+
+            while (!queue.isEmpty()) {
+                System.out.println("Dequeued: " + queue.dequeue());
+            }
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
