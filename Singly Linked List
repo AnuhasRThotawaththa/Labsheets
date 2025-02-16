@@ -1,0 +1,205 @@
+package Tutorial;
+
+public class LinkedList {
+    public static class Node {
+        public int data;
+        public Node next;
+
+        public Node(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    private Node head;
+
+    public LinkedList() {
+        this.head = null;
+    }
+
+    public void append(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+    }
+
+    public void insertBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    public void insertAfter(int data, int afterValue) {
+        Node current = head;
+        while (current != null && current.data != afterValue) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Value " + afterValue + " not found.");
+            return;
+        }
+
+        Node newNode = new Node(data);
+        newNode.next = current.next;
+        current.next = newNode;
+    }
+
+    public Node findLast() {
+        if (head == null) {
+            return null;
+        }
+
+        Node current = head;
+        while (current.next != null) {
+            current = current.next;
+        }
+        return current;
+    }
+
+    public Node find(int value) {
+        Node current = head;
+        while (current != null) {
+            if (current.data == value) {
+                return current;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
+    public void insertBefore(int data, int beforeValue) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        if (head.data == beforeValue) {
+            insertBeginning(data);
+            return;
+        }
+
+        Node current = head;
+        while (current.next != null && current.next.data != beforeValue) {
+            current = current.next;
+        }
+
+        if (current.next == null) {
+            System.out.println("Value " + beforeValue + " not found.");
+        } else {
+            Node newNode = new Node(data);
+            newNode.next = current.next;
+            current.next = newNode;
+        }
+    }
+
+    public void deleteFirst() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        head = head.next;
+    }
+
+    public void deleteLast() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        if (head.next == null) {
+            head = null;
+            return;
+        }
+
+        Node current = head;
+        while (current.next.next != null) {
+            current = current.next;
+        }
+        current.next = null;
+    }
+
+    public void delete(int data) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        if (head.data == data) {
+            head = head.next;
+            return;
+        }
+
+        Node current = head;
+        while (current.next != null && current.next.data != data) {
+            current = current.next;
+        }
+
+        if (current.next == null) {
+            System.out.println("Element not found.");
+        } else {
+            current.next = current.next.next;
+        }
+    }
+
+    @Override
+    public String toString() {
+        if (head == null) {
+            return "List is empty.";
+        }
+
+        StringBuilder result = new StringBuilder();
+        Node current = head;
+        while (current != null) {
+            result.append(current.data).append(" -> ");
+            current = current.next;
+        }
+        result.append("null");
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedList list = new LinkedList();
+
+        list.append(10);
+        list.append(20);
+        list.append(30);
+
+        System.out.println("Initial list:");
+        System.out.println(list);
+
+        list.insertBeginning(5);
+        System.out.println("After inserting 5 at the beginning:");
+        System.out.println(list);
+
+        list.insertAfter(15, 10);
+        System.out.println("After inserting 15 after 10:");
+        System.out.println(list);
+
+        list.insertBefore(18, 20);
+        System.out.println("After inserting 18 before 20:");
+        System.out.println(list);
+
+        Node last = list.findLast();
+        System.out.println("Last node is: " + (last != null ? last.data : "null"));
+
+        list.deleteFirst();
+        System.out.println("After deleting the first node:");
+        System.out.println(list);
+
+        list.deleteLast();
+        System.out.println("After deleting the last node:");
+        System.out.println(list);
+
+        list.delete(18);
+        System.out.println("After deleting 18:");
+        System.out.println(list);
+    }
+}
